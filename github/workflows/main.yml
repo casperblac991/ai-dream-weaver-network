@@ -1,28 +1,26 @@
 name: Automatic AI Product Creator
 
 on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: # للتشغيل اليدوي
   schedule:
-    - cron: '0 0 * * 1' # يعمل تلقائياً كل يوم اثنين
-  workflow_dispatch: # يتيح لك تشغيله يدوياً في أي وقت
+    - cron: '0 0 * * *' # للتشغيل التلقائي اليومي
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.9'
-          
-      - name: Install dependencies
-        run: pip install openai requests
-        
-      - name: Run Bot
-        run: echo "Bot will run here" # سيتم استبدال هذا بكود البوت الفعلي
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          GUMROAD_API_KEY: ${{ secrets.GUMROAD_API_KEY }}
-
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    - name: Install dependencies
+      run: |
+        pip install openai requests
+    - name: Run Bot
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }} # استدعاء المفتاح
+      run: |
+        python bots/product_bot.py
