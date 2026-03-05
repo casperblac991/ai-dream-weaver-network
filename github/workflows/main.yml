@@ -1,11 +1,10 @@
 name: Automatic AI Product Creator
-
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch: # للتشغيل اليدوي
+  workflow_dispatch: # التنشيط اليدوي
   schedule:
-    - cron: '0 0 * * *' # للتشغيل التلقائي اليومي
+    - cron: '0 0 * * *' # التفاعل اليومي
 
 jobs:
   build:
@@ -18,9 +17,10 @@ jobs:
         python-version: '3.9'
     - name: Install dependencies
       run: |
-        pip install openai requests
+        pip install openai requests python-telegram-bot
     - name: Run Bot
       env:
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }} # استدعاء المفتاح
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
       run: |
-        python bots/product_bot.py
+        python all_bots.py
